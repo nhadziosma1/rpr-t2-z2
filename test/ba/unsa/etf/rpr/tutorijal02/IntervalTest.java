@@ -2,7 +2,8 @@ package ba.unsa.etf.rpr.tutorijal02;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class IntervalTest {
+class IntervalTest
+{
 
     @org.junit.jupiter.api.Test
     void ctorExceptionTest() {
@@ -12,7 +13,8 @@ class IntervalTest {
     }
 
     @org.junit.jupiter.api.Test
-    void toStringTest() {
+    void toStringTest()
+    {
         Interval i = new Interval(1.1, 2.5, true, false);
         assertEquals("[1.1,2.5)", i.toString());
     }
