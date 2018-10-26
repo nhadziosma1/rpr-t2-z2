@@ -4,8 +4,8 @@ import java.util.*;  //da bi se mogla koristiti fukcija "Math.abs(x)"
 
 public class Interval
 {
-    double t1, t2;
-    boolean t1_p, t2_p;
+    private double t1, t2;
+    private boolean t1_p, t2_p;
 
     public Interval(double t1, double t2, boolean t1_p, boolean t2_p)  throws IllegalArgumentException //kostruktor
     {
@@ -61,38 +61,31 @@ public class Interval
         t2_p=false;
     }
 
-    public boolean isIn(double t3)
-    {
+    public boolean isIn(double t3) {
         final double EPSILON = 0.0001;
 
-        if(t1_p==false && t2_p==false)
-        {
-            if(t3<t1 || t3>t2 || Math.abs(t3-t1)<EPSILON || Math.abs(t3-t2)<EPSILON )
+        if (t1_p == false && t2_p == false) {
+            if (t3 < t1 || t3 > t2 || Math.abs(t3 - t1) < EPSILON || Math.abs(t3 - t2) < EPSILON)
+                return false;
+
+            return true;
+        } else if (t1_p == false && t2_p == true) {
+            if (t3 < t1 || t3 > t2 || Math.abs(t3 - t1) < EPSILON)
+                return false;
+
+            return true;
+        } else if (t1_p == true && t2_p == false) {
+            if (t3 < t1 || t3 > t2 || Math.abs(t3 - t2) < EPSILON)
+                return false;
+
+            return true;
+        } else if (t1_p == true && t2_p == true) {
+            if (t3 < t1 || t3 > t2)
                 return false;
 
             return true;
         }
-        else if(t1_p==false && t2_p==true)
-        {
-            if(t3<t1 || t3>t2 || Math.abs(t3-t1)<EPSILON )
-                return false;
-
-            return true;
-        }
-        else if(t1_p==true && t2_p==false)
-        {
-            if(t3<t1 || t3>t2 || Math.abs(t3-t2)<EPSILON )
-                return false;
-
-            return true;
-        }
-        else if(t1_p==true && t2_p==true)
-        {
-            if(t3<t1 || t3>t2 )
-                return false;
-
-            return true;
-        }
+        return false;//ZAsto
     }
 
     public boolean isNull()
@@ -103,7 +96,7 @@ public class Interval
         return false;
     }
 
-    public Interval intersect(Interval i2) throws Exception
+    public Interval intersect(Interval i2)
     {
         if( this.isIn(i2.t1)==true )
         {
@@ -132,6 +125,7 @@ public class Interval
             }
         }
 
+        return new Interval(0, 0, false, false);
     }
 
     public static Interval intersect(Interval i1, Interval i2) //throws Exception
@@ -162,7 +156,7 @@ public class Interval
 
             }
         }
-
+        return new Interval(0, 0, false, false);
     }
 
     public boolean equals(Interval i)
