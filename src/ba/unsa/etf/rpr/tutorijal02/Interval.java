@@ -17,7 +17,8 @@ public class Interval
         }
         catch(IllegalArgumentException objekat)
         {
-            System.out.println(objekat.getMessage() );
+            System.out.println( objekat.getMessage() );
+            throw objekat;
         }
 
         this.t2=t2;
@@ -39,8 +40,8 @@ public class Interval
         {
             if(t1_p==true)               //"bollean" tipovi elemenata se mogu porediti na jednakost sa operatorom "==", jer spada u POD tipove
                 s="[";
-            else if(t1_p==false)
-                s=s"(";
+            else
+                s="(";
 
             s= s+ (t1+","+t2);
 
@@ -92,7 +93,6 @@ public class Interval
 
             return true;
         }
-
     }
 
     public boolean isNull()
@@ -103,13 +103,13 @@ public class Interval
         return false;
     }
 
-    public Interval intersects(Interval i2) throws Exception
+    public Interval intersect(Interval i2) throws Exception
     {
         if( this.isIn(i2.t1)==true )
         {
             if(this.isIn(i2.t2)==true )
                 return new Interval (i2.t1, i2.t2, true, true);
-            else(this.isIn(i2.t2)==false)
+            else if(this.isIn(i2.t2)==false)
                 return new Interval (i2.t1, this.t2, true, true);
         }
         else if( this.isIn(i2.t1)==false)
@@ -127,40 +127,43 @@ public class Interval
                 if(i2.isIn(this.t2)==true)
                     return new Interval(i2.t1, this.t2, true, true);
                 else if(i2.isIn(this.t2)==false)
-                    throw new Exception ("Intervali se ne sijeku");
+                    System.out.println("Intervali se ne sijeku"); //throw new Exception ("Intervali se ne sijeku");
 
             }
         }
 
     }
 
-    /*@org.junit.jupiter.api.Test
-    void intersect() {
-        Interval i = new Interval(1.1, 2.5, true, false);
-        Interval i2 = i.intersect(new Interval(2.2, 2.6, true, true));
-        assertEquals("[2.2,2.5)", i2.toString());
+    public static Interval intersect(Interval i1, Interval i2) //throws Exception
+    {
+        if( i1.isIn(i2.t1)==true )
+        {
+            if(i1.isIn(i2.t2)==true )
+                return new Interval (i2.t1, i2.t2, true, true);
+            else if(i1.isIn(i2.t2)==false)
+                return new Interval (i2.t1, i1.t2, true, true);
+        }
+        else if( i1.isIn(i2.t1)==false)
+        {
+            //mozda su krajnje tacke i2 vece od onih objekta nad kojim se vrsi metoda
+            if(i2.isIn(i1.t1)==true)
+            {
+                if(i2.isIn(i1.t2)==true)
+                    return new Interval (i1.t1, i1.t2, true, true);
+                else if(i2.isIn(i1.t2)==false)
+                    return new Interval(i1.t1, i2.t2, true, true);
+            }
+            else if(i2.isIn(i1.t1)==false)
+            {
+                if(i2.isIn(i1.t2)==true)
+                    return new Interval(i2.t1, i1.t2, true, true);
+                else if(i2.isIn(i1.t2)==false)
+                    System.out.println("Intervali se ne sijeku"); //throw new Exception ("Intervali se ne sijeku");
+
+            }
+        }
+
     }
-    @org.junit.jupiter.api.Test
-    void intersect1() {
-        Interval i = new Interval(1.1, 2.5, true, false);
-        Interval i2 = new Interval(2.2, 2.6, true, true);
-        Interval i3 = Interval.intersect(i, i2);
-        assertEquals("[2.2,2.5)", i3.toString());
-    }
-    @org.junit.jupiter.api.Test
-    void intersect2() {
-        Interval i = new Interval(1.1, 10.5, true, false);
-        Interval i2 = new Interval(2.2, 2.6, true, true);
-        Interval i3 = Interval.intersect(i, i2);
-        assertEquals("[2.2,2.6]", i3.toString());
-    }
-    @org.junit.jupiter.api.Test
-    void intersect3() {
-        Interval i = new Interval(-1.1, 2.5, true, false);
-        Interval i2 = new Interval(2.2, 3.6, false, true);
-        Interval i3 = Interval.intersect(i, i2);
-        assertEquals("(2.2,2.5)", i3.toString());
-    }*/
 
     public boolean equals(Interval i)
     {
@@ -171,16 +174,5 @@ public class Interval
 
         return false;
     }
-    /*@org.junit.jupiter.api.Test
-    void equals() {
-        Interval i = new Interval(1.1, 2.5, true, false);
-        Interval i2 = new Interval(1.1, 2.5, true, false);
-        assertTrue(i.equals(i2));
-    }
-    @org.junit.jupiter.api.Test
-    void equals2() {
-        Interval i = new Interval(1.1, 2.5, true, false);
-        Interval i2 = new Interval(1.1, 2.5, true, true);
-        assertFalse(i.equals(i2));
-    }*/
+
 }
