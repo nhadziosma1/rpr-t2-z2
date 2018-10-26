@@ -1,77 +1,140 @@
 package ba.unsa.etf.rpr.tutorijal02;
 
+import java.util.*;  //da bi se mogla koristiti fukcija "Math.abs(x)"
+
 public class Interval
 {
-    private
-    public void Interval()
+    double t1, t2;
+    boolean t1_p, t2_p;
+
+    public Interval(double t1, double t2, boolean t1_p, boolean t2_p)  throws IllegalArgumentException //kostruktor
     {
         try
         {
-
+            final double EPSILON = 0.0001;
+            if( t1-t2 < EPSILON)
+                throw new IllegalArgumentException("Pocetna tacka veca od krajnje");
         }
-        catch(IllegalArgumentException )
+        catch(IllegalArgumentException objekat)
         {
-            System.out.println("");
+            System.out.println(objekat.getMessage() );
         }
 
-    }
-    void ctorExceptionTest()
-    {
-        assertThrows(IllegalArgumentException.class, () -> {
-            Interval i = new Interval(2.5, 2.4, true, true);
-        });
+        this.t2=t2;
+        this.t1=t1;
+        this.t2_p=t2_p;
+        this.t1_p=t1_p;
+
     }
 
     public String toString()
     {
+        String s;
 
-    }
-    void toStringTest()
-    {
-        Interval i = new Interval(1.1, 2.5, true, false);
-        assertEquals("[1.1,2.5)", i.toString());
-    }
-    @org.junit.jupiter.api.Test
-    void toString2() {
-        Interval i = new Interval();
-        assertEquals("()", i.toString());
+        if(t1==0 && t2==0)
+        {
+           s="()";
+        }
+        else
+        {
+            if(t1_p==true)               //"bollean" tipovi elemenata se mogu porediti na jednakost sa operatorom "==", jer spada u POD tipove
+                s="[";
+            else if(t1_p==false)
+                s=s"(";
+
+            s= s+ (t1+","+t2);
+
+            if(t2_p==true)
+                s=s+ "]";
+            else if(t2_p==false)
+                s=s+")";
+        }
+        return s;
     }
 
-    public boolean isIn()
+    public Interval()
     {
-        if()
+        t1=0;
+        t2=0;
+        t1_p=false;
+        t2_p=false;
     }
-    @org.junit.jupiter.api.Test
-    void isIn() {
-        Interval i = new Interval(1.1, 2.5, true, false);
-        assertTrue(i.isIn(2.3));
-    }
-    @org.junit.jupiter.api.Test
-    void isIn2() {
-        Interval i = new Interval(1.1, 2.5, true, false);
-        assertTrue(i.isIn(1.1));
-    }
-    @org.junit.jupiter.api.Test
-    void isIn3() {
-        Interval i = new Interval(1.1, 2.5, true, false);
-        assertFalse(i.isIn(2.5));
+
+    public boolean isIn(double t3)
+    {
+        final double EPSILON = 0.0001;
+
+        if(t1_p==false && t2_p==false)
+        {
+            if(t3<t1 || t3>t2 || Math.abs(t3-t1)<EPSILON || Math.abs(t3-t2)<EPSILON )
+                return false;
+
+            return true;
+        }
+        else if(t1_p==false && t2_p==true)
+        {
+            if(t3<t1 || t3>t2 || Math.abs(t3-t1)<EPSILON )
+                return false;
+
+            return true;
+        }
+        else if(t1_p==true && t2_p==false)
+        {
+            if(t3<t1 || t3>t2 || Math.abs(t3-t2)<EPSILON )
+                return false;
+
+            return true;
+        }
+        else if(t1_p==true && t2_p==true)
+        {
+            if(t3<t1 || t3>t2 )
+                return false;
+
+            return true;
+        }
+
     }
 
     public boolean isNull()
     {
-        if()
-    }
-    @org.junit.jupiter.api.Test
-    void isNull() {
-        Interval i = new Interval();
-        assertTrue(i.isNull());
+        if(t1==0 && t2==0 && t1_p==false && t2_p==false)
+            return true;
+
+        return false;
     }
 
-    public void intersects(Interval inter)
+    public Interval intersects(Interval i2) throws Exception
     {
+        if( this.isIn(i2.t1)==true )
+        {
+            if(this.isIn(i2.t2)==true )
+                return new Interval (i2.t1, i2.t2, true, true);
+            else(this.isIn(i2.t2)==false)
+                return new Interval (i2.t1, this.t2, true, true);
+        }
+        else if( this.isIn(i2.t1)==false)
+        {
+            //mozda su krajnje tacke i2 vece od onih objekta nad kojim se vrsi metoda
+            if(i2.isIn(this.t1)==true)
+            {
+                if(i2.isIn(this.t2)==true)
+                    return new Interval (this.t1, this.t2, true, true);
+                else if(i2.isIn(this.t2)==false)
+                    return new Interval(this.t1, i2.t2, true, true);
+            }
+            else if(i2.isIn(this.t1)==false)
+            {
+                if(i2.isIn(this.t2)==true)
+                    return new Interval(i2.t1, this.t2, true, true);
+                else if(i2.isIn(this.t2)==false)
+                    throw new Exception ("Intervali se ne sijeku");
+
+            }
+        }
 
     }
-    @org.junit.jupiter.api.Test
+
+    /*@org.junit.jupiter.api.Test
     void intersect() {
         Interval i = new Interval(1.1, 2.5, true, false);
         Interval i2 = i.intersect(new Interval(2.2, 2.6, true, true));
@@ -97,13 +160,18 @@ public class Interval
         Interval i2 = new Interval(2.2, 3.6, false, true);
         Interval i3 = Interval.intersect(i, i2);
         assertEquals("(2.2,2.5)", i3.toString());
-    }
+    }*/
 
-    public boolean equals()
+    public boolean equals(Interval i)
     {
+        final double EPSILON=0.0001;
 
+        if( Math.abs(t1-i.t1)<EPSILON && Math.abs(t2-i.t2)<EPSILON && t1_p==i.t1_p && t2_p==i.t2_p )
+            return true;
+
+        return false;
     }
-    @org.junit.jupiter.api.Test
+    /*@org.junit.jupiter.api.Test
     void equals() {
         Interval i = new Interval(1.1, 2.5, true, false);
         Interval i2 = new Interval(1.1, 2.5, true, false);
@@ -114,5 +182,5 @@ public class Interval
         Interval i = new Interval(1.1, 2.5, true, false);
         Interval i2 = new Interval(1.1, 2.5, true, true);
         assertFalse(i.equals(i2));
-    }
+    }*/
 }
