@@ -5,6 +5,9 @@ public class Main
 {
     public static void main(String[] args)
     {
-        System.out.println("Nema ništa u mainu, pokrenite testove!");
+        Interval i = new Interval(1.1, 2.5, true, false);
+        //assertEquals("[1.1,2.5)", i.toString());
+
+        System.out.println(i.toString());
     }
 }
